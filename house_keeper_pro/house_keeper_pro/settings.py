@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'common_core.apps.CommonCoreConfig',                    # Центральный модуль
+    'home_finance.apps.HomeFinanceConfig',                  # Домашнее хозяйство
+    'trading_investments.apps.TradingInvestmentsConfig',    # Трейдинг и инвестиции
+    'consulting.apps.ConsultingConfig',                     # Финансовое консультирование
 ]
 
 # Middleware framework

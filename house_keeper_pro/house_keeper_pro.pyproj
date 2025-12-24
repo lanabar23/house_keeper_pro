@@ -3,6 +3,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Name>house_keeper_pro</Name>
     <RootNamespace>house_keeper_pro</RootNamespace>
+    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -29,17 +30,86 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="common_core\admin.py" />
+    <Compile Include="common_core\apps.py" />
+    <Compile Include="common_core\migrations\__init__.py" />
+    <Compile Include="common_core\models.py" />
+    <Compile Include="common_core\tests.py" />
+    <Compile Include="common_core\urls.py" />
+    <Compile Include="common_core\views.py" />
+    <Compile Include="common_core\__init__.py" />
+    <Compile Include="consulting\admin.py" />
+    <Compile Include="consulting\apps.py" />
+    <Compile Include="consulting\migrations\__init__.py" />
+    <Compile Include="consulting\models.py" />
+    <Compile Include="consulting\tests.py" />
+    <Compile Include="consulting\views.py" />
+    <Compile Include="consulting\__init__.py" />
+    <Compile Include="home_finance\admin.py" />
+    <Compile Include="home_finance\apps.py" />
+    <Compile Include="home_finance\migrations\__init__.py" />
+    <Compile Include="home_finance\models.py" />
+    <Compile Include="home_finance\tests.py" />
+    <Compile Include="home_finance\views.py" />
+    <Compile Include="home_finance\__init__.py" />
+    <Compile Include="house_keeper_pro\views.py" />
     <Compile Include="manage.py" />
     <Compile Include="house_keeper_pro\__init__.py" />
     <Compile Include="house_keeper_pro\settings.py" />
     <Compile Include="house_keeper_pro\urls.py" />
     <Compile Include="house_keeper_pro\wsgi.py" />
+    <Compile Include="trading_investments\admin.py" />
+    <Compile Include="trading_investments\apps.py" />
+    <Compile Include="trading_investments\migrations\__init__.py" />
+    <Compile Include="trading_investments\models.py" />
+    <Compile Include="trading_investments\tests.py" />
+    <Compile Include="trading_investments\views.py" />
+    <Compile Include="trading_investments\__init__.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".github\workflows\main.yml" />
+    <Content Include=".git\hooks\pre-commit" />
+    <Content Include=".pre-commit-config.yaml" />
+    <Content Include="common_core\templates\common_core\index.html" />
+    <Content Include="consulting\templates\consulting\index.html" />
+    <Content Include="home_finance\templates\home_finance\index.html" />
+    <Content Include="README.md" />
     <Content Include="requirements.txt" />
+    <Content Include="trading_investments\templates\trading_investments\index.html" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include=".github\" />
+    <Folder Include=".github\workflows\" />
+    <Folder Include=".git\" />
+    <Folder Include=".git\hooks\" />
+    <Folder Include="common_core\" />
+    <Folder Include="common_core\migrations\" />
+    <Folder Include="common_core\templates\" />
+    <Folder Include="common_core\templates\common_core\" />
+    <Folder Include="consulting\" />
+    <Folder Include="consulting\migrations\" />
+    <Folder Include="consulting\templates\" />
+    <Folder Include="consulting\templates\consulting\" />
+    <Folder Include="home_finance\" />
+    <Folder Include="home_finance\migrations\" />
+    <Folder Include="home_finance\templates\" />
+    <Folder Include="home_finance\templates\home_finance\" />
     <Folder Include="house_keeper_pro\" />
+    <Folder Include="trading_investments\" />
+    <Folder Include="trading_investments\migrations\" />
+    <Folder Include="trading_investments\templates\" />
+    <Folder Include="trading_investments\templates\trading_investments\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="env\">
+      <Id>env</Id>
+      <Version>3.11</Version>
+      <Description>env (Python 3.11 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Django.targets" />
   <!-- Specify pre- and post-build commands in the BeforeBuild and 
