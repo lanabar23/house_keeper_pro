@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Search Books</h1>
+    <form method="get">
+        <input type="text" name="q" placeholder="Search by book name or author">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    {% if books %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">book_name</th>
+                <th scope="col">author</th>
+                <th scope="col">year</th>
+                <th scope="col">rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book.book_name }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.publ_year }}</td>
+                <td>{{ book.rating }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No books found.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Моя библиотека</h1>
+    {% if books %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Название книги</th>
+                <th scope="col">Автор</th>
+                <th scope="col">Год издания</th>
+                <th scope="col">Рейтинг</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book.book_name }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.publ_year }}</td>
+                <td>{{ book.rating }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Нет книг в библиотеке.</p>
+    {% endif %}
+</div>
+{% endblock %}

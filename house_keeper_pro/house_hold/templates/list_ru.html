@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Моя библиотека</h1>
+    <a href="{% url 'add_book' %}" class="btn btn-primary">Добавить</a>
+    <form method="get">
+        <label for="year">Year:</label>
+        <input type="number" name="year" id="year">
+        <label for="rating">Rating:</label>
+        <input type="number" name="rating" id="rating">
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col"><a href="{% url 'library_list' %}?sort=book_name">Название книги</a></th>
+                <th scope="col"><a href="{% url 'library_list' %}?sort=author">Автор</a></th>
+                <th scope="col"><a href="{% url 'library_list' %}?sort=publ_year">Год издания</a></th>
+                <th scope="col"><a href="{% url 'library_list' %}?sort=rating">Рейтинг</a></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book.book_name }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.publ_year }}</td>
+                <td>{{ book.rating }}</td>
+                <td><a href="{% url 'edit_book' book.pk %}" class="btn btn-secondary">Редактировать</a></td>
+                <td><a href="{% url 'delete_book' book.pk %}" class="btn btn-danger">Удалить</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

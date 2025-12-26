@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'common_core.apps.CommonCoreConfig',                    # Центральный модуль
-    'home_finance.apps.HomeFinanceConfig',                  # Домашнее хозяйство
+    'house_hold.apps.HouseHoldConfig',                  # Домашнее хозяйство
     'trading_investments.apps.TradingInvestmentsConfig',    # Трейдинг и инвестиции
     'consulting.apps.ConsultingConfig',                     # Финансовое консультирование
+    'profi_way.apps.ProfiWayConfig',                        # Профессиональные навыки
 ]
 
 # Middleware framework
@@ -62,7 +63,7 @@ ROOT_URLCONF = 'house_keeper_pro.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -105,8 +106,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'ru' # 'en-us'
+TIME_ZONE = 'Europe/Moscow' # 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True

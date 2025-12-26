@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список проектов</title>
+</head>
+<body>
+    <h1>Список проектов</h1>
+    <ul>
+        {% for project in projects %}
+        <li>
+            <a href="{% url 'project_edit' project.pk %}">{{ project.name }}</a>
+            - {{ project.status }}
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'project_create' %}">Добавить проект</a><br>
+    <!-- Добавляем кнопку возврата -->
+    <button onclick="window.location.href='{% url 'index' %}'">Вернуться в главное меню</button>
+</body>
+</html>
