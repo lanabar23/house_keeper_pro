@@ -1,23 +1,23 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
 {% block content %}
 <div class="container mt-5">
-    <h1>My</h1>
-    <a href="{% url 'add_book' %}" class="btn btn-primary">Add Book</a>
+    <h1>Моя библиотека</h1>
+    <a href="{% url 'household:add_book' %}" class="btn btn-primary">Добавить книгу</a>
     <form method="get">
-        <label for="year">Year:</label>
+        <label for="year">Год:</label>
         <input type="number" name="year" id="year">
-        <label for="rating">Rating:</label>
+        <label for="rating">Рейтинг:</label>
         <input type="number" name="rating" id="rating">
         <button type="submit" class="btn btn-primary">Filter</button>
     </form>
     <table class="table table-striped">
         <thead>
             <tr>
-                <th scope="col"><a href="{% url 'library_list' %}?sort=book_name">book_name</a></th>
-                <th scope="col"><a href="{% url 'library_list' %}?sort=author">author</a></th>
-                <th scope="col"><a href="{% url 'library_list' %}?sort=publ_year">year</a></th>
-                <th scope="col"><a href="{% url 'library_list' %}?sort=rating">rating</a></th>
+                <th scope="col"><a href="{% url 'household:library_list' %}?sort=book_name">Название книги</a></th>
+                <th scope="col"><a href="{% url 'household:library_list' %}?sort=author">Автор</a></th>
+                <th scope="col"><a href="{% url 'household:library_list' %}?sort=publ_year">Год</a></th>
+                <th scope="col"><a href="{% url 'household:library_list' %}?sort=rating">Рейтинг</a></th>
             </tr>
         </thead>
         <tbody>
@@ -27,8 +27,8 @@
                 <td>{{ book.author }}</td>
                 <td>{{ book.publ_year }}</td>
                 <td>{{ book.rating }}</td>
-                <td><a href="{% url 'edit_book' book.pk %}" class="btn btn-secondary">Edit</a></td>
-                <td><a href="{% url 'delete_book' book.pk %}" class="btn btn-danger">Delete</a></td>
+                <td><a href="{% url 'household:edit_book' book.pk %}" class="btn btn-secondary">Редактировать</a></td>
+                <td><a href="{% url 'household:delete_book' book.pk %}" class="btn btn-danger">Удалить</a></td>
             </tr>
             {% endfor %}
         </tbody>

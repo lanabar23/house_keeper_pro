@@ -1,73 +1,131 @@
-from django.shortcuts import render, redirect
-from django.utils.encoding import smart_str
-from django.shortcuts import get_object_or_404
+﻿# common_core/views.py
+from django.shortcuts import render
+from house_keeper_pro.views import list_view, create_view, update_view, delete_view
+from django.views.generic import TemplateView
 
-from django.views.generic import TemplateView, ListView
-from .models import FamilyLibrary
-from house_hold.forms import BookForm
-
-
-class HomeView(TemplateView):
-    template_name = 'home.html'  # ������� ��������
-
-class LibraryListView(ListView):
-    model = FamilyLibrary
-    context_object_name = 'books'
-    template_name = 'list.html'
-    
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        sort_by = self.request.GET.get('sort')
-        year = self.request.GET.get('year')
-        rating = self.request.GET.get('rating')
-        
-        if sort_by:
-            queryset = queryset.order_by(sort_by)
-        
-        if year:
-            queryset = queryset.filter(publ_year=year)
-        
-        if rating:
-            queryset = queryset.filter(rating=rating)
-        
-        return queryset
+from .forms import ActDoneForm, BookDoneForm, UsersActionsForm
+from .models import ActionsFacts, BooksFacts, UsersActions
+from house_keeper_pro.utils.filters import FilterCollection
 
 
-def add_book(request):
-    if request.method == 'POST':
-        form = BookForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('library_list')
+MODELS_AND_FORMS = {
+    'UsersActions': {'class': UsersActions, 'form': UsersActionsForm}, 
+    'ActionsFacts': {'class': ActionsFacts, 'form': ActDoneForm}, 
+    'BooksFacts': {'class': BooksFacts, 'form': BookDoneForm}, 
+    }
+
+class HomeView(TemplateView):    
+    template_name = 'notes_list.html'  # главная страница
+
+class UsersActionsView(TemplateView):
+    HEADERS = [
+        {'actcat': 'Категория'},
+        {'actdone': 'Действие'},
+        {'actstart': 'Начало'},
+        {'actplandur': 'План дл-ть'},
+        {'actfactdur': 'Факт дл-ть'},
+        {'actcoment': 'Комментарий/описание'},
+    ]
+    FILTERS = ['actcat','actdone', 'actstart']
+
+    model_name = UsersActions
+    model_form = UsersActionsForm
+    template_name = 'general_list.html'
+
+    def get(self, request):
+        return list_item(request, self.model_name,  self.model_form, self.FILTERS, self.HEADERS)
+
+
+class DayActionsView(TemplateView):
+    HEADERS = [
+        {'actdone': 'Действие'},
+        {'actstart': 'Начало'},
+        {'actfinish': 'Окончание'},
+        {'actcoment': 'Комментарий/описание'},
+    ]
+    FILTERS = ['actdone', 'actstart']
+
+    model_name = ActionsFacts
+    model_form = ActDoneForm
+    template_name = 'general_list.html'
+
+    def get(self, request):
+        return list_item(request, self.model_name,  self.model_form, self.FILTERS, self.HEADERS)
+
+class BookActsView(TemplateView):
+    HEADERS = [
+        {'book_name': 'Книга'},
+        {'timestart': 'Время старта'},
+        {'timefin': 'Время окончания'},
+        {'pagestart': 'Старт (стр)'},
+        {'pagefin': 'Финиш (стр)'},
+        {'bookstatus': 'Статус'},
+        {'basic_thoughts': 'Главные мысли автора'},
+        {'coment': 'Комментарий'},
+    ]
+    FILTERS = ['book_name', 'bookstatus']
+
+    model_class = BooksFacts
+    model_form = BookDoneForm
+    template_name = 'general_list.html'
+
+    def get(self, request):
+        return list_item(request, self.model_class,  self.model_form, self.FILTERS, self.HEADERS)
+
+
+def prepare_filters_and_headers(model_class, FILTERS, HEADERS):
+    """Подготавливает фильтры и заголовки"""
+    filters_collection = FilterCollection()
+    for el in FILTERS:
+        filters_collection.add_filter(model_class, el)
+
+    # filters = filters_collection.as_dict()
+
+    headers = []
+    for header in HEADERS:
+        print('header: ', header)
+        for key, value in header.items():
+            headers.append({'field':key, 'label':value})
+
+    return filters_collection, headers
+
+def list_item(request, model_class=None, model_form=None, FILTERS=None, HEADERS=None):
+    # Подготовка фильтров и заголовков
+    if FILTERS is not None  and HEADERS is not None:
+        filters_collection, headers = prepare_filters_and_headers(model_class, FILTERS, HEADERS)
     else:
-        form = BookForm()
-    return render(request, 'add_book.html', {'form': form})
+        filters_collection = request.session.get('filters')
+        headers =  request.session.get('headers')
+        model_name = request.session.get('model_name')
+        model_class = MODELS_AND_FORMS[model_name]['class'] 
+        model_form = MODELS_AND_FORMS[model_name]['form'] 
+
+    app_namespace = request.resolver_match.namespace
+    print('app_namespace:\n', app_namespace)    
+
+    return list_view(request, model_class, model_form, app_namespace, filters=filters_collection, headers=headers)
+
+def add_item(request):
+    model_name = request.session.get('model_name')
+    print('model_name: ', model_name)
+    print('MODELS_AND_FORMS', MODELS_AND_FORMS[model_name]['form'])
+
+    return create_view(request, MODELS_AND_FORMS[model_name]['form'])
+
+def edit_item(request, model_name, model_form, pk):
+    model_form = request.session.get('model_form')
+    model_name = request.session.get('model_name')
+
+    print('model_form: ', model_form)
+    print('model_name: ', model_name)
+    return update_view(request, model_name, model_form, pk)
+
+# def delete_item(request, model_name, pk):
+#    model_name = request.session.get('model_name')
+#    print('model_name: ', model_name)
+#    return delete_view(request, model_name, pk)
 
 
-def edit_book(request, pk):
-    book = get_object_or_404(FamilyLibrary, pk=pk)
-    if request.method == 'POST':
-        form = BookForm(request.POST, instance=book)
-        if form.is_valid():
-            form.save()
-            return redirect('library_list')
-    else:
-        form = BookForm(instance=book)
-    # return render(request, 'edit_book.html', {'form': form})
-    return render(request, 'edit_book.html', {'form': form})
-
-def search_books(request):
-    query = request.GET.get('q')
-    if query:
-        books = FamilyLibrary.objects.filter(book_name__icontains=query) | FamilyLibrary.objects.filter(author__icontains=query)
-    else:
-        books = FamilyLibrary.objects.all()
-    return render(request, 'search.html', {'books': books})
 
 
-def delete_book(request, pk):
-    book = get_object_or_404(FamilyLibrary, pk=pk)
-    if request.method == 'POST':
-        book.delete()
-        return redirect('library_list')
-    return render(request, 'delete_book.html', {'book': book})
+

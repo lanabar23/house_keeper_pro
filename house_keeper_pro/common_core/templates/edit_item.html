@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование книги</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control {
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #004990;
+            }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg p-4 mb-4 bg-body rounded">
+                    <h2 class="text-center mb-4">Редактирование книги</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="id_shortquery" class="form-label">Краткая форма</label>
+                                {{ form.shortquery }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_fullquery" class="form-label">Развернутая форма</label>
+                                {{ form.fullquery }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_appsname" class="form-label">Приложение</label>
+                                {{ form.appsname }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_querykind" class="form-label">Тип</label>
+                                {{ form.querykind }}
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="id_is_urgent" name="is_urgent" value="on" {{ form.is_urgent.value|yesno:"checked," }}>
+                                    <label for="is_urgent" class="form-check-label">Срочность</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_source" class="form-label">Причина/источник происхождения</label>
+                                {{ form.source }}
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="id_asktime" class="form-label">Время поступления</label>
+                                {{ form.asktime }}
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="id_resolvetime" class="form-label">Время решения</label>
+                                {{ form.resolvetime }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_status" class="form-label">Статус</label>
+                                {{ form.status }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_resways" class="form-label">Варианты  ответов/решений</label>
+                                {{ form.resansways}}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_resans" class="form-label">Фактический ответ/решение</label>
+                                {{ form.resansfact }}
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="id_rating" class="form-label">Коментарий</label>
+                                {{ form.coment }}
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-6 mx-auto my-4">
+                            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

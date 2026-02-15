@@ -1,6 +1,12 @@
 from django.shortcuts import render, redirect
+from django.views.generic import TemplateView, ListView
 from .models import Project
+
 from .forms import ProjectForm
+
+
+class ProfiWay(TemplateView):
+    template_name = 'projects/project_list.html'  # главная страница
 
 def project_list(request):
     projects = Project.objects.all()

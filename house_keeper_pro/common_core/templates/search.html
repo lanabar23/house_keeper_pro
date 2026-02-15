@@ -1,0 +1,37 @@
+﻿{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Поисковик</h1>
+    <form method="get">
+        <input type="text" name="q" placeholder="Поиск по задаче или вопросу">
+        <button type="submit" class="btn btn-primary">�����</button>
+    </form>
+    {% if books %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Формулировка</th>
+                <th scope="col">Приложение</th>
+                <th scope="col">Тип</th>
+                <th scope="col">Время</th>
+                <th scope="col">Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ item.shortquery }}</td>
+                <td>{{ item.appsname }}</td>
+                <td>{{ item.querykind }}</td>
+                <td>{{ item.asktime }}</td>
+                <td>{{ item.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>По запросу ничего не найдено.</p>
+    {% endif %}
+</div>
+{% endblock %}

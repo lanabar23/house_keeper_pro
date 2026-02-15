@@ -1,0 +1,72 @@
+﻿{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        form .form-control {
+            width: 100%;
+            font-size: 18px; /* Увеличение размера шрифта */
+            background-color: #f0f0f0; /* Подсветка полей ввода */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        form .form-group {
+            margin-bottom: 1rem;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 24px; /* Размер шрифта для меток */
+        }
+
+        form .row {
+            margin-bottom: 2rem; /* Дополнительное расстояние между полями и кнопками */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card shadow-lg p-3 mb-5 bg-body rounded">
+            <div class="card-header text-center">
+                <h1 class="mb-0">Добавление новой записи {{ item_name }}</h1>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        {% for field in form %}
+                        <div class="col-md-6">
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                        {% if forloop.counter|divisibleby:2 %}
+                    </div><div class="row">
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-md-4">
+                            <button type="submit" name="action" value="save_and_exit" class="btn btn-primary w-100">Сохранить и выйти</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" name="action" value="continue" class="btn btn-success w-100">Продолжить</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" name="action" value="cancel" class="btn btn-secondary w-100">Отмена</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

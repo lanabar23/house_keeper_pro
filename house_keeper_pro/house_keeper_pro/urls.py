@@ -1,4 +1,4 @@
-"""
+﻿"""
 house_keeper_pro URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -25,8 +25,16 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),   
-    path('', views.index, name='index'),
-    path('', include('house_hold.urls')),
-    path('', include('profi_way.urls')),
+path('admin/', admin.site.urls),
+# path('', views.index, name='index'),  # Главная страница
+path('', include('house_keeper_hub.urls')),  # Пространство имен для главной страницы
+path('household/', include(('house_hold.urls', 'house_hold'), namespace='household')),
+path('profiway/', include(('profi_way.urls', 'profi_way'), namespace='profway')),
+path('commoncore/', include(('common_core.urls', 'common_core'), namespace='commoncore')),
+# path('list/', views.list_view, name='list'),  # Этот путь кажется лишним, удали его, если не нужен
+# path('add/', views.create_view, name='add_urls'),
+path('int:pk/edit/', views.update_view, name='edit'),
+path('int:pk/delete/', views.delete_view, name='delete'),
 ]
+
+

@@ -1,0 +1,71 @@
+﻿<!-- qa_list.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Мои вопросы/задачи</h1>
+    <a href="{% url 'add_item' %}" class="btn btn-primary">Добавить</a>
+    <form method="get">
+        <!-- Фильтр по приложениям -->
+        <div class="mb-3">
+            <label for="appsname">Приложение:</label>
+            <select name="appsname" id="appsname" class="form-select">
+                <option value="">Все приложения</option>
+                {% for choice_value, choice_label in apps_choices %}
+                <option value="{{ choice_value }}" {% if request.GET.appsname= =choice_value %}selected{% endif %}>
+                    {{ choice_label }}
+                </option>
+                {% endfor %}
+            </select>
+
+            
+        </div>
+
+        <!-- Фильтр по статусу -->
+        <div class="mb-3">
+            <label for="status">Статус вопроса/задачи:</label>
+            <select name="status" id="status" class="form-select">
+                <option value="">Любой статус</option>
+                {% for choice_value, choice_label in status_choices %}
+                <option value="{{ choice_value }}" {% if request.GET.status == choice_value %}selected{% endif %}>
+                    {{ choice_label }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Применить фильтр</button>
+    </form>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col"><a href="{% url 'qa_list' %}?sort=shortquery">Формулировка</a></th>
+                <th scope="col"><a href="{% url 'qa_list' %}?sort=appsname">Приложение</a></th>
+                <th scope="col"><a href="{% url 'qa_list' %}?sort=querykind">Тип</a></th>
+                <th scope="col"><a href="{% url 'qa_list' %}?sort=asktime">Время</a></th>
+                <th scope="col"><a href="{% url 'qa_list' %}?sort=status">Статус</a></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if items %}
+            {% for item in items %}
+            Для сброса фильтров нажмите любой столбец в шапке
+            <tr>
+                <td>{{ item.shortquery }}</td>
+                <td>{{ item.appsname }}</td>
+                <td>{{ item.querykind }}</td>
+                <td>{{ item.asktime }}</td>
+                <td>{{ item.status }}</td>
+                <td><a href="{% url 'edit_item' item.pk %}" class="btn btn-secondary">Редактировать</a></td>
+                <td><a href="{% url 'delete_item' item.pk %}" class="btn btn-danger">Удалить</a></td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            Нет доступных записей.
+            <!--apps_choices: {{ apps_choices }}
+    status_choices: {{ status_choices }}-->
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

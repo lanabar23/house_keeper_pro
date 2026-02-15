@@ -1,0 +1,22 @@
+form .form-control {
+    width: 100%;
+    font-size: 24px; /* Увеличение размера шрифта */
+    background-color: #f0f0f0; /* Подсветка полей ввода */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+form .form-group {
+    margin-bottom: 1rem;
+}
+
+form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 24px; /* Размер шрифта для меток */
+}
+
+form .row {
+    margin-bottom: 2rem; /* Дополнительное расстояние между полями и кнопками */
+}

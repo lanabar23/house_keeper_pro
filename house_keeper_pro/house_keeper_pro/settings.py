@@ -25,6 +25,8 @@ SECRET_KEY = '2cc46f2a-b026-4c59-8853-ec05e48c88dc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 ALLOWED_HOSTS = []
 
 # Application references
@@ -37,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'house_keeper_pro',
+    'house_keeper_hub.apps.HouseKeeperHubConfig',
     'common_core.apps.CommonCoreConfig',                    # Центральный модуль
     'house_hold.apps.HouseHoldConfig',                  # Домашнее хозяйство
     'trading_investments.apps.TradingInvestmentsConfig',    # Трейдинг и инвестиции
@@ -116,3 +120,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 STATIC_URL = '/static/'
 STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}

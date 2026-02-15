@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<!-- general_qa_list.html -->
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- Используем класс summary-row для оформления итоговой строки -->
+<div class="box-container">
+    <div class="summary-box">Всего {{ total_count_label }}: {{ total_items }}</div>
+    <div class="summary-box">Изменение за неделю:</div>
+    <div class="summary-box">Изменение за месяц:</div>
+    <div class="summary-box">Изменение за год:</div>
+    <div class="summary-box">{{ totalsum_label }}: {{ totalsum_value|format_number }}</div>
+    <!-- Можете добавлять дополнительные блоки по желанию -->
+</div>
+
+<div class="container mt-5">
+    <div class="d-flex align-items-center mb-3">
+        <h1 class="me-auto">Справочник {{ total_count_label }}</h1>
+        <a href="{{ add_url }}" class="btn btn-primary">Добавить новый элемент</a>
+    </div>
+    <form method="GET" class="d-flex justify-content-between w-100 align-items-center">
+        {% for field_name, filter_data in filters %}
+        <div class="mb-3 filter-item">
+            <label for="id_{{ field_name }}">{{ field_name|get_label:headers }}</label><br />
+            {% if filter_data.type == 'select' %}
+            <select id="id_{{ field_name }}" name="{{ field_name }}" class="form-select form-select-sm mb-2">
+                {% for option_key, option_value in filter_data.options.items %}
+                <option value="{{ option_key }}" {% if request.GET.field_name == option_key %}selected{% endif %}>
+                    {{ option_value }}
+                </option>
+                {% endfor %}
+            </select>
+            {% else %}
+            <input type="text" id="id_{{ field_name }}" name="{{ field_name }}" value="{% firstof request.GET.field_name '' %}" class="form-control form-control-sm" />
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <!-- Устанавливаем начальное значение сортировки по умолчанию -->
+        {% if not request.GET.sort %}
+        {% with default_sort='id' %}
+        <input type="hidden" name="sort" value="{{ default_sort }}" />
+        {% endwith %}
+        {% else %}
+        <input type="hidden" name="sort" value="{{ request.GET.sort }}" />
+        {% endif %}
+        <button type="submit" class="btn btn-primary ms-auto">Применить фильтры</button>
+        <!-- Новая кнопка "Сбросить фильтры" -->
+        <button type="button" onclick="resetFilters()" class="btn btn-outline-secondary ms-2">Сбросить фильтры</button>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                {% for header in headers %}
+                <th scope="col"><a href="{{ list_url }}?sort={{ header.field }}">{{ header.label }}</a></th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% if items %}
+            {% for item in items %}
+            <tr>
+                {% for el in item %}
+                <td>{{ el.attr|format_number }}</td>
+                {% endfor %}
+                <!-- Кнопка редактирования -->
+                <td>
+                   
+                    <a href="#" class="btn btn-secondary">Редактировать</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="{{ headers|length|add:'1' }}">Нет доступных данных.</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <!-- Блок пагинации -->
+    <nav aria-label="Pagination Navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1" aria-label="Предыдущая">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for pg_num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == pg_num %}active{% endif %}">
+                <a class="page-link" href="?page={{ pg_num }}">{{ pg_num }}</a>
+            </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Следующая">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- Скрипт для очистки фильтров -->
+    <script>
+    function resetFilters() {
+        document.location.href = "{{ list_url }}"; // Возвращаемся на начальную страницу
+    }
+    </script>
+</div>
+
+{% endblock %}

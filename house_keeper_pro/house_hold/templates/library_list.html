@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-5">
     <h1>Моя библиотека</h1>
-    <a href="{% url 'add_book' %}" class="btn btn-primary">Добавить</a>
+    <a href="{% url 'household:add_book' %}" class="btn btn-primary">Добавить</a>
     <form method="get">
         <label for="year">Year:</label>
         <input type="number" name="year" id="year">
@@ -14,10 +14,10 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th scope="col"><a href="{% url 'library_list' %}?sort=book_name">Название книги</a></th>
-                <th scope="col"><a href="{% url 'library_list' %}?sort=author">Автор</a></th>
-                <th scope="col"><a href="{% url 'library_list' %}?sort=publ_year">Год издания</a></th>
-                <th scope="col"><a href="{% url 'library_list' %}?sort=rating">Рейтинг</a></th>
+                <th scope="col"><a href="{% url 'household:library_list' %}?sort=book_name">Название книги</a></th>
+                <th scope="col"><a href="{% url 'household:library_list' %}?sort=author">Автор</a></th>
+                <th scope="col"><a href="{% url 'household:library_list' %}?sort=publ_year">Год издания</a></th>
+                <th scope="col"><a href="{% url 'household:library_list' %}?sort=rating">Рейтинг</a></th>
             </tr>
         </thead>
         <tbody>

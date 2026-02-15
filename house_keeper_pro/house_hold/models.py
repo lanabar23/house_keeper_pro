@@ -1,31 +1,92 @@
+п»їfrom enum import auto
 from django.db import models
+from django.utils import timezone
 
-class FamilyLibrary(models.Model):
-    # Модель для представления книг в семейной библиотеке"""
+from django.forms.fields import DateTimeField
+from common_core.models  import Actions, Books, Categories, SubCategories, ActSubCategories
 
-    # Поля базы данных
-    book_name = models.CharField(max_length=200)  # Имя книги
-    tag_name = models.CharField(max_length=50, blank=True, null=True)  # Теги
-    kind_of_book = models.CharField(max_length=50, blank=True, null=True)  # Вид книги
-    author = models.CharField(max_length=100)  # Автор
-    pages = models.PositiveIntegerField()  # Количество страниц
-    subject = models.CharField(max_length=100)  # Область знаний
-    publ_seria = models.CharField(max_length=100, blank=True, null=True)  # Серия публикации
-    is_q_and_exc = models.BooleanField(default=False)  # Признак наличия вопросов и упражнений
-    is_answers = models.BooleanField(default=False)  # Признак наличия ответов
-    timestart = models.DateField(blank=True, null=True)  # Дата начала чтения
-    timefin_plan = models.DateField(blank=True, null=True)  # Планируемая дата завершения
-    timefin_fact = models.DateField(blank=True, null=True)  # Фактическая дата завершения
-    rating = models.IntegerField()  # Рейтинг книги
-    basic_thoughts = models.TextField(blank=True, null=True)  # Основные мысли
-    publ_year = models.IntegerField()  # Год издания
-    publ_house = models.CharField(max_length=100)  # Издательство
-    publ_city = models.CharField(max_length=100, blank=True, null=True)  # Город издательства
-    coment = models.CharField(max_length=30, blank=True, null=True)  # Комментарий
+class UsersActions(models.Model):
+    actcat = models.ForeignKey(
+        'common_core.Categories',
+        related_name='actcat',
+        null=True,
+        on_delete=models.SET_NULL, # , on_delete=models.CASCADE
+        blank=True
+    )
+    actdone = models.ForeignKey(
+        'common_core.ActSubCategories',
+        related_name='actdone',
+        null=True,
+        on_delete=models.SET_NULL, # , on_delete=models.CASCADE
+        blank=True
+    )
+    actstart = models.DateTimeField(default=timezone.now)
+    actplandur = models.CharField(max_length=5)
+    actfactdur = models.CharField(max_length=5, null=True)
+    actstatus = models.CharField(choices=[
+        ('online', 'РѕРЅР»Р°Р№РЅ'),
+        ('offline','РѕС„Р»Р°Р№РЅ')
+        ], default='online')
+    actarea = models.CharField(choices=[
+        ('inside', 'РІ РїРѕРјРµС‰РµРЅРёРё'),
+        ('seatlace','РЅР° РєСЂРµСЃР»Рµ'),
+        ('bedlace','РЅР° РґРёРІР°РЅРµ'),
+        ('outside','РЅР° СѓР»РёС†Рµ')
+        ], default='inside')
+    actcoment = models.CharField(max_length=250, null=True)
 
     def __str__(self):
-        # Возвращает строку, представляющую объект"""
-        return f'{self.book_name} {self.author}'
+        return self.actdone
 
+
+class ActionsFacts(models.Model):
+    actdone = models.ForeignKey(
+        'common_core.Actions',
+        related_name='actdone',
+        null=True,
+        on_delete=models.SET_NULL, # , on_delete=models.CASCADE
+        blank=True
+    )
+    actstart = models.DateTimeField(default=timezone.now)
+    actfinish = models.DateTimeField(default=timezone.now)
+    actstatus = models.CharField(choices=[
+        ('online', 'РѕРЅР»Р°Р№РЅ'),
+        ('offline','РѕС„Р»Р°Р№РЅ')
+        ], default='online')
+    actarea = models.CharField(choices=[
+        ('inside', 'РІ РїРѕРјРµС‰РµРЅРёРё'),
+        ('inplace','РІ РєСЂРѕРІР°С‚Рё/РЅР° РєСЂРµСЃР»Рµ'),
+        ('outside','РЅР° СѓР»РёС†Рµ')
+        ], default='inside')
+    actcoment = models.CharField(max_length=250, null=True)
+
+    def __str__(self):
+        return self.actdone
+    
+
+class BooksFacts(models.Model):
+    # РњРѕРґРµР»СЊ РґР»СЏ С„РёРєСЃРёСЂРѕРІР°РЅРёСЏ СЂР°Р±РѕС‚С‹ СЃ РєРЅРёРіРѕР№ РІ СЃРµРјРµР№РЅРѕР№ Р±РёР±Р»РёРѕС‚РµРєРµ"""
+    book_name = models.ForeignKey(
+        'common_core.Books',
+        related_name='bookdone',
+        null=True,
+        on_delete=models.SET_NULL,
+        blank=True
+    )
+    timestart = models.DateTimeField(default=timezone.now)
+    timefin = models.DateTimeField(default=timezone.now)
+    pagestart = models.PositiveIntegerField()  # РЎС‚Р°СЂС‚РѕРІР°СЏ СЃС‚СЂР°РЅРёС†Р°
+    pagefin = models.PositiveIntegerField()  # Р¤РёРЅРёС€РЅР°СЏ СЃС‚СЂР°РЅРёС†Р°
+    bookstatus = models.CharField(choices=[
+        ('in_progress', 'РІ СЂР°Р±РѕС‚Рµ'),
+        ('on_delay','РѕС‚Р»РѕР¶РµРЅР°'),
+        ('read','РїСЂРѕС‡РёС‚Р°РЅР°')
+        ], default='inside')
+    basic_thoughts = models.TextField(blank=True, null=True)  # РћСЃРЅРѕРІРЅС‹Рµ РјС‹СЃР»Рё
+    coment = models.CharField(max_length=30, blank=True, null=True)  # РљРѕРјРјРµРЅС‚Р°СЂРёР№
+
+    def __str__(self):
+        # Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃС‚СЂРѕРєСѓ, РїСЂРµРґСЃС‚Р°РІР»СЏСЋС‰СѓСЋ РѕР±СЉРµРєС‚"""
+        return f'{self.book_name}' 
     class Meta:
-        ordering = ['book_name']  # сортировка по имени книги
+        ordering = ['book_name']  # СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕ РёРјРµРЅРё РєРЅРёРіРё
